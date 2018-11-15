@@ -14,7 +14,7 @@ export default class TimeInput extends Component {
 
         setInterval(() => {
             current = new Date();
-            date = current.toLocaleDateString('en-US');
+            date = this.formatDate(current.toLocaleDateString('en-US'));
             time = current.toLocaleTimeString('en-US');
             this.setState({
                 date: date,
@@ -26,8 +26,11 @@ export default class TimeInput extends Component {
     async uploadDateTime() {
 
         current = new Date();
-        dateTime = current.toLocaleDateString('en-US') + '-' + current.toLocaleTimeString('en-US');
-        // ToastAndroid.show(dateTime, ToastAndroid.LONG);
+        date = this.formatDate(current.toLocaleDateString('en-US'));
+        time = current.toLocaleTimeString('en-US');
+
+        dateTime = date + '-' + time;
+        ToastAndroid.show(dateTime, ToastAndroid.LONG);
 
         const dateTimeURL = urlBase + '?T=' + dateTime
         await fetch(dateTimeURL, {
@@ -44,6 +47,16 @@ export default class TimeInput extends Component {
                     ]
                 )
             });
+    }
+
+    formatDate(date) {
+        try {
+        var d = date.split('/');
+        return d[1] + '/' + d[0] + '/' + d[2];
+        } catch(error) {
+            ToastAndroid.show(error, ToastAndroid.LONG);
+            return 'error';
+        }
     }
 
     render() {

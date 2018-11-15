@@ -28,8 +28,10 @@ export default class MessageInput extends Component {
 
         SharedPreferences.setItem('message', message);
 
-        const messageURL = urlBase + '?M=' + message;
+        let convertedMessage = this.convertMessage(message);
+        ToastAndroid.show(convertedMessage, ToastAndroid.LONG);
 
+        const messageURL = urlBase + '?M=' + convertedMessage;
         await fetch(messageURL, {
             method: 'GET'
         }).then(response => response.text())
@@ -46,6 +48,17 @@ export default class MessageInput extends Component {
             });
     }
 
+    convertMessage(message) {
+
+        var convertedMessage = '';
+        for (let i = 0; i < message.length; i++) {
+            convertedMessage += message.charCodeAt(i).toString(16);
+            if(i==message.length-1) break;                //avoid adding '-' after last character
+            convertedMessage += '-';
+        }
+        return convertedMessage;
+    }
+
     render() {
         return (
             <View style={styles.container}>
@@ -58,7 +71,7 @@ export default class MessageInput extends Component {
                         defaultValue={this.state.message}
                         placeholder={'Enter message here'}
                         multiline={true}
-                        maxLength={500}
+                        maxLength={100}
                         autoCorrect={false}
                         onChangeText={text => this.setState({ message: text })} />
                 </View>
