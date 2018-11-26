@@ -1,11 +1,9 @@
 import React, { Component } from 'react';
 import { Platform, StyleSheet, Text, Image, View, TextInput, StatusBar, Alert,
   TouchableOpacity, ImageBackground, ToastAndroid, TouchableHighlightBase } from 'react-native';
-import SharedPreferences from 'react-native-shared-preferences';
+// import SharedPreferences from 'react-native-shared-preferences';
 import MessageInput from './components/MessageInput';
 import TimeInput from './components/TimeInput';
-
-const urlBase = 'http://192.168.4.1/RFREY';
 
 export default class App extends Component {
 
@@ -18,31 +16,6 @@ export default class App extends Component {
 
   componentDidMount() {
     StatusBar.setHidden(true);
-
-    var that = this;
-    SharedPreferences.getItem('message', function (value) {
-      that.setState({ message: value });
-    });
-  }
-
-  async uploadMessage(message) {
-
-    SharedPreferences.setItem('message', message);
-
-    await fetch(messageURL, {
-      method: 'GET'
-    }).then(response => {
-    }).then(responseData => {
-      ToastAndroid.show(responseData, ToastAndroid.SHORT);
-    }).catch((error) => {
-      Alert.alert(
-        'Network Error',
-        'Please make sure you are connected to hotspot of the LED board',
-        [
-          { text: 'Ok' }
-        ]
-      )
-    });
   }
 
   render() {
